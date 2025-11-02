@@ -12,7 +12,12 @@ int main() {
   if(command == "exit 0") {
     return 0;
   }
-  std::cout << command << ": command not found" << std::endl;
+  if(command.starts_with("echo ")) {
+    std::cout << command.substr(5) << std::endl;
+  }
+  else {
+    std::cout << command << ": command not found" << std::endl;
+  }
 
   main();
 }
