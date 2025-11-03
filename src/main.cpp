@@ -24,6 +24,17 @@ std::vector<std::string> split(char *input) {
   return paths;
 }
 
+bool find_file(const std::string fpath) {
+  if (fs::exists(fpath)) {
+    fs::file_status fstatus = fs::status(fpath);
+    fs::perms fpermission = fstatus.permissions();
+    if ((fpermission & fs::perms::owner_exec) != fs::perms::none) {
+      return true;
+    }
+  }
+  return false;
+}
+
 int main() {
   std::cout << std::unitbuf;
   std::cerr << std::unitbuf;
@@ -52,14 +63,10 @@ int main() {
       bool found = false;
       for (const auto &path : splited_paths) {
         std::string fpath = path + '/' + arg;
-        if (fs::exists(fpath)) {
+        if (find_file(fpath)) {
+          std::cout << arg << " is " << fpath << std::endl;
           found = true;
-          fs::file_status fstatus = fs::status(fpath);
-          fs::perms fpermission = fstatus.permissions();
-          if ((fpermission & fs::perms::owner_exec) != fs::perms::none) {
-            std::cout << arg << " is " << fpath << std::endl;
-            break;
-          }
+          break;
         }
       }
       if(!found) {
