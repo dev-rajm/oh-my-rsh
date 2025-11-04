@@ -43,7 +43,7 @@ int main() {
   char *process_env = getenv("PATH");
   std::vector<std::string> paths = split(process_env);
 
-  std::vector<std::string> builtins{"type", "exit", "echo"};
+  std::vector<std::string> builtins{"type", "exit", "echo", "pwd"};
 
   std::cout << "$ ";
 
@@ -73,6 +73,8 @@ int main() {
         std::cout << arg << ": not found" << std::endl;
       }
     }
+  } else if (command == "pwd") {
+    std::system(command.c_str());
   } else {
     bool found = false;
     std::string exec_name = command.substr(0, command.find(' '));
