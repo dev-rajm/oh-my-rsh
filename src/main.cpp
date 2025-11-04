@@ -1,7 +1,6 @@
 #include <cstdlib>
 #include <filesystem>
 #include <iostream>
-#include <numeric>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -13,12 +12,12 @@ const char DELIMITER = ';';
 const char DELIMITER = ':';
 #endif
 
-std::vector<std::string> split(char *input) {
+std::vector<std::string> split(std::string input, char divider = DELIMITER) {
   std::vector<std::string> chunks;
   std::string chunk;
   std::stringstream ss(input);
 
-  while (std::getline(ss, chunk, DELIMITER)) {
+  while (std::getline(ss, chunk, divider)) {
     chunks.emplace_back(chunk);
   }
 
@@ -36,7 +35,7 @@ bool find_file(const std::string fpath) {
   return false;
 }
 
-int main(int argc, char *argv[]) {
+int main() {
   std::cout << std::unitbuf;
   std::cerr << std::unitbuf;
 
@@ -76,11 +75,12 @@ int main(int argc, char *argv[]) {
     }
   } else {
     bool found = false;
+    std::string program_name = command.substr(0, command.find(' '));
     for (const auto &path : splited_paths) {
-      std::string program_name = path + '/' + argv[0];
-      if (find_file(program_name)) {
-        const char* exec_str = command.c_str();
-        std::system(exec_str);
+      std::string program_path = path + '/' + program_name;
+      if (find_file(program_path)) {
+        const char *exec_cmd = command.c_str();
+        std::system(exec_cmd);
         found = true;
         break;
       }
@@ -90,5 +90,5 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  main(0, {});
+  main();
 }
