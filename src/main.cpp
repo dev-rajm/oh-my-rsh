@@ -24,11 +24,11 @@ std::vector<std::string> split(std::string input, char divider = DELIMITER) {
   return chunks;
 }
 
-bool find_file(const std::string fpath) {
-  if (fs::exists(fpath)) {
-    fs::file_status fstatus = fs::status(fpath);
-    fs::perms fpermission = fstatus.permissions();
-    if ((fpermission & fs::perms::owner_exec) != fs::perms::none) {
+bool find_executable_path(const std::string exec_path) {
+  if (fs::exists(exec_path)) {
+    fs::file_status exec_status = fs::status(exec_path);
+    fs::perms exec_perm = exec_status.permissions();
+    if ((exec_perm & fs::perms::owner_exec) != fs::perms::none) {
       return true;
     }
   }
@@ -40,8 +40,8 @@ int main() {
   std::cerr << std::unitbuf;
 
   // get the path environment variable
-  char *path_value = getenv("PATH");
-  std::vector<std::string> splited_paths = split(path_value);
+  char *process_env = getenv("PATH");
+  std::vector<std::string> paths = split(process_env);
 
   std::vector<std::string> builtins{"type", "exit", "echo"};
 
@@ -61,10 +61,10 @@ int main() {
       std::cout << arg << " is a shell builtin" << std::endl;
     } else {
       bool found = false;
-      for (const auto &path : splited_paths) {
-        std::string fpath = path + '/' + arg;
-        if (find_file(fpath)) {
-          std::cout << arg << " is " << fpath << std::endl;
+      for (const auto &path : paths) {
+        std::string exec_path = path + '/' + arg;
+        if (find_executable_path(exec_path)) {
+          std::cout << arg << " is " << exec_path << std::endl;
           found = true;
           break;
         }
@@ -75,10 +75,10 @@ int main() {
     }
   } else {
     bool found = false;
-    std::string program_name = command.substr(0, command.find(' '));
-    for (const auto &path : splited_paths) {
-      std::string program_path = path + '/' + program_name;
-      if (find_file(program_path)) {
+    std::string exec_name = command.substr(0, command.find(' '));
+    for (const auto &path : paths) {
+      std::string exec_path = path + '/' + exec_name;
+      if (find_executable_path(exec_path)) {
         std::system(command.c_str());
         found = true;
         break;
