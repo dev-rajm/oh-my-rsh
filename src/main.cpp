@@ -79,8 +79,7 @@ int main() {
     for (const auto &path : splited_paths) {
       std::string program_path = path + '/' + program_name;
       if (find_file(program_path)) {
-        const char *exec_cmd = command.c_str();
-        std::system(exec_cmd);
+        std::system(command.c_str());
         found = true;
         break;
       }
