@@ -7,8 +7,12 @@
 namespace fs = std::filesystem;
 
 #ifdef _WIN32
+#include <direct.h>
+#define CHDIR _chdir
 const char DELIMITER = ';';
 #else
+#include <unistd.h>
+#define CHDIR chdir
 const char DELIMITER = ':';
 #endif
 
@@ -75,6 +79,14 @@ int main() {
     }
   } else if (command == "pwd") {
     std::system(command.c_str());
+  } else if (command.starts_with("cd")) {
+    std::string dir_path = command.substr(3);
+    if (fs::exists(dir_path) && fs::is_directory(dir_path)) {
+      CHDIR(dir_path.c_str());
+    }
+    else {
+      std::cout << "cd: " << dir_path << ": No such file or directory" << std::endl;
+    }
   } else {
     bool found = false;
     std::string exec_name = command.substr(0, command.find(' '));
