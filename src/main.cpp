@@ -81,6 +81,7 @@ int main() {
     std::system(command.c_str());
   } else if (command.starts_with("cd")) {
     std::string dir_path = command.substr(3);
+    if(dir_path == "~") dir_path = std::getenv("HOME");
     if (find_executable_path(dir_path) && fs::is_directory(dir_path)) {
       CHDIR(dir_path.c_str());
     }
