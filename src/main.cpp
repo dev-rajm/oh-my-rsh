@@ -59,14 +59,7 @@ int main() {
   }
 
   if (command.starts_with("echo")) {
-    std::string str = command.substr(5);
-    if (str.find('\'') != std::string::npos) {
-      str.erase(std::remove(str.begin(), str.end(), '\''), str.end());
-    } else {
-      std::regex pattern("\\s+");
-      str = std::regex_replace(str, pattern, " ");
-    }
-    std::cout << str << std::endl;
+    std::system(command.c_str());
   } else if (command.starts_with("type")) {
     std::string arg = command.substr(5);
     if (std::find(builtins.begin(), builtins.end(), arg) != builtins.end()) {
