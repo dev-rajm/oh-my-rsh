@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <filesystem>
 #include <iostream>
+#include <regex>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -58,7 +59,14 @@ int main() {
   }
 
   if (command.starts_with("echo")) {
-    std::cout << command.substr(5) << std::endl;
+    std::string str = command.substr(5);
+    if (str.find('\'') != std::string::npos) {
+      str.erase(std::remove(str.begin(), str.end(), '\''), str.end());
+    } else {
+      std::regex pattern("\\s+");
+      str = std::regex_replace(str, pattern, " ");
+    }
+    std::cout << str << std::endl;
   } else if (command.starts_with("type")) {
     std::string arg = command.substr(5);
     if (std::find(builtins.begin(), builtins.end(), arg) != builtins.end()) {
@@ -81,12 +89,13 @@ int main() {
     std::system(command.c_str());
   } else if (command.starts_with("cd")) {
     std::string dir_path = command.substr(3);
-    if(dir_path == "~") dir_path = std::getenv("HOME");
+    if (dir_path == "~")
+      dir_path = std::getenv("HOME");
     if (find_executable_path(dir_path) && fs::is_directory(dir_path)) {
       CHDIR(dir_path.c_str());
-    }
-    else {
-      std::cout << "cd: " << dir_path << ": No such file or directory" << std::endl;
+    } else {
+      std::cout << "cd: " << dir_path << ": No such file or directory"
+                << std::endl;
     }
   } else {
     bool found = false;
