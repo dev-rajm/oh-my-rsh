@@ -50,7 +50,7 @@ int main() {
         }
       }
     } else if (command == "pwd") {
-      std::system(command.c_str());
+      std::cout << fs::current_path().string() << std::endl;
     } else if (command.starts_with("cd")) {
       std::string dir_path = command.substr(3);
       if (dir_path == "~")
