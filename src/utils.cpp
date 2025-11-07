@@ -1,25 +1,10 @@
-#include <cstdlib>
+#include "utils.h"
 #include <filesystem>
-#include <iostream>
 #include <sstream>
-#include <string>
-#include <vector>
+
 namespace fs = std::filesystem;
 
-#ifndef UTILS_H
-#define UTILS_H
-
-#ifdef _WIN32
-#include <direct.h>
-#define CHDIR _chdir
-const char DELIMITER = ';';
-#else
-#include <unistd.h>
-#define CHDIR chdir
-const char DELIMITER = ':';
-#endif
-
-std::vector<std::string> split(std::string input, char divider = DELIMITER) {
+std::vector<std::string> split(std::string input, char divider) {
   std::vector<std::string> chunks;
   std::string chunk;
   std::stringstream ss(input);
@@ -77,5 +62,3 @@ bool find_executable_path(const std::string exec_path) {
   }
   return false;
 }
-
-#endif
