@@ -114,10 +114,10 @@ void handle_cd(const std::string &input) {
 void handle_external(const std::string &input,
                      const std::vector<std::string> &paths) {
   std::string exec_name;
-  if(input.front() == '\'')
-    exec_name = input.substr(1, input.find_last_of('\'')-1);
-  else if(input.front() == '"')
-    exec_name = input.substr(1, input.find_last_of('"')-1);
+  if (input.front() == '\'')
+    exec_name = input.substr(1, input.find_last_of('\'') - 1);
+  else if (input.front() == '"')
+    exec_name = input.substr(1, input.find_last_of('"') - 1);
   else
     exec_name = input.substr(0, input.find(' '));
   for (const auto &path : paths) {
