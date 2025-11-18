@@ -2,6 +2,7 @@
 #include <filesystem>
 #include <iostream>
 #include <sstream>
+#include <fstream>
 
 namespace fs = std::filesystem;
 
@@ -130,6 +131,21 @@ void handle_external(const std::string &input,
   std::cerr << exec_name << ": command not found" << std::endl;
 }
 
+// ----- handle redirect -----
+void handle_redirect(const std::string &command) {
+  size_t redirect_pos = command.find('>');
+  std::string path = command.substr(command.find('>') + 2);
+  if(command[redirect_pos] == '1') {
+    redirect_pos--;
+  }
+  std::string raw = command.substr(0, redirect_pos);
+  std::fstream file(path);
+  if(file.is_open()) {
+    file << split_input(raw) << std::endl;
+    file.close();
+  }
+}
+
 // ----- handle commands -----
 void handle_command(const std::string &command_name, const std::string &args,
                     const std::string &command,
@@ -143,6 +159,8 @@ void handle_command(const std::string &command_name, const std::string &args,
     handle_pwd();
   } else if (command_name == "cd") {
     handle_cd(args);
+  } else if(args.find('>') != std::string::npos) {
+    handle_redirect(command, paths);
   } else {
     handle_external(command, paths);
   }

@@ -33,5 +33,6 @@ void handle_pwd();
 void handle_cd(const std::string &input);
 void handle_external(const std::string &input,
                      const std::vector<std::string> &paths);
+void handle_redirect(std::string &input);
 
 #endif
