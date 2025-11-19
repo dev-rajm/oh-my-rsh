@@ -14,6 +14,7 @@ const char DELIMITER = ';';
 const char DELIMITER = ':';
 #endif
 
+void trim(std::string &s);
 std::vector<std::string> split(std::string input, char divider = DELIMITER);
 std::vector<std::string> split_input(const std::string &str);
 bool find_executable_path(const std::string &exec_path);
@@ -33,6 +34,5 @@ void handle_pwd();
 void handle_cd(const std::string &input);
 void handle_external(const std::string &input,
                      const std::vector<std::string> &paths);
-void handle_redirect(std::string &input);
 
 #endif
