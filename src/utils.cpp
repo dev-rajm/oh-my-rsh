@@ -1,6 +1,5 @@
 #include "utils.h"
 #include <filesystem>
-#include <fstream>
 #include <iostream>
 #include <sstream>
 
@@ -18,6 +17,7 @@ void trim(std::string &s) {
           s.end());
 }
 
+// split path environment 
 std::vector<std::string> split(std::string input, char divider) {
   std::vector<std::string> chunks;
   std::string chunk;
@@ -30,6 +30,7 @@ std::vector<std::string> split(std::string input, char divider) {
   return chunks;
 }
 
+// split argument 
 std::vector<std::string> split_input(const std::string &str) {
   std::vector<std::string> tokens;
 
@@ -66,6 +67,7 @@ std::vector<std::string> split_input(const std::string &str) {
   return tokens;
 }
 
+// find executable program path
 bool find_executable_path(const std::string &exec_path) {
   if (fs::exists(exec_path)) {
     fs::file_status exec_status = fs::status(exec_path);
